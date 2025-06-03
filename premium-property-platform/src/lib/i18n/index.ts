@@ -4,7 +4,7 @@ import { createI18n } from 'next-international';
 export const locales = ['en', 'lt', 'ru'] as const;
 export const defaultLocale = 'en' as const;
 
-export const { 
+export const {
   useI18n,
   useScopedI18n,
   I18nProvider,

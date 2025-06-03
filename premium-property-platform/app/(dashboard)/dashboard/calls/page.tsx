@@ -50,7 +50,7 @@ export default async function CallLogPage() {
         <h1 className="text-3xl font-bold text-slate-800 flex items-center">
           <PhoneCall className="h-8 w-8 mr-3 text-amber-500" /> Call Logs
         </h1>
-        <Link 
+        <Link
           href="/dashboard/calls/new"
           className="flex items-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out"
         >
@@ -65,7 +65,7 @@ export default async function CallLogPage() {
               <div className="flex flex-col sm:flex-row justify-between sm:items-start mb-3">
                 <div>
                   <p className="text-sm text-slate-500 flex items-center">
-                     <Clock size={14} className="mr-1.5 text-slate-400" /> 
+                     <Clock size={14} className="mr-1.5 text-slate-400" />
                      {format(parseISO(log.call_time), 'MMM d, yyyy, h:mm a')}
                   </p>
                   {log.clients ? (
@@ -77,20 +77,20 @@ export default async function CallLogPage() {
                     </p>
                   )}
                 </div>
-                <Link 
+                <Link
                     href={`/dashboard/calls/${log.id}/edit`}
                     className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center mt-2 sm:mt-0 self-start sm:self-center p-1 rounded-md hover:bg-amber-50"
                 >
                   <Edit3 className="h-4 w-4 mr-1" /> Edit Log
                 </Link>
               </div>
-              
+
               <p className="text-sm text-slate-700 mb-3 whitespace-pre-wrap bg-slate-50 p-4 rounded-md border border-slate-200">{log.description}</p>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs text-slate-600 mt-3 pt-3 border-t border-slate-200">
                 {log.properties && (
                   <div className="flex items-center col-span-full sm:col-span-1">
-                    <HomeIcon className="h-4 w-4 mr-1.5 flex-shrink-0 text-purple-500" /> 
+                    <HomeIcon className="h-4 w-4 mr-1.5 flex-shrink-0 text-purple-500" />
                     <span className="font-medium text-slate-500 mr-1">Property:</span>
                     <Link href={`/properties/${log.properties.id}`} className="hover:text-purple-700 hover:underline truncate">
                         {log.properties.street || 'N/A'}, {log.properties.city}
@@ -117,7 +117,7 @@ export default async function CallLogPage() {
             You haven't logged any calls. Keep track of your client communications here.
           </p>
           <div className="mt-6">
-            <Link 
+            <Link
               href="/dashboard/calls/new"
               className="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out"
             >

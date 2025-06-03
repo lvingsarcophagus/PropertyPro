@@ -34,7 +34,7 @@ export default async function NewCalendarEventPage() {
     .eq('broker_id', session.user.id) // Assuming properties are linked to broker directly
     .order('created_at', { ascending: false });
     // Or, if properties are linked via agency for company users:
-    // .eq('agency_id', userProfile?.agency_id) 
+    // .eq('agency_id', userProfile?.agency_id)
     // This might need adjustment based on your data model for properties if company users add events
 
   if (propertiesError) {
@@ -52,8 +52,8 @@ export default async function NewCalendarEventPage() {
         </Link>
       </div>
       <h1 className="text-3xl font-bold text-slate-800">Add New Calendar Event</h1>
-      <CalendarEventForm 
-        userId={session.user.id} 
+      <CalendarEventForm
+        userId={session.user.id}
         clients={clients}
         properties={properties}
       />

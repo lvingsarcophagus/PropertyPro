@@ -60,7 +60,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ userProfile }) => {
       if (data.profile_picture_file && data.profile_picture_file.length > 0) {
         const file = data.profile_picture_file[0];
         const filePath = `${userProfile.id}/avatar-${Date.now()}.${file.name.split('.').pop()}`;
-        
+
         // Ensure 'profile-pictures' bucket exists and has appropriate policies
         const { error: uploadError } = await supabase.storage
           .from('profile-pictures')
@@ -74,7 +74,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ userProfile }) => {
         const { data: publicUrlData } = supabase.storage
           .from('profile-pictures')
           .getPublicUrl(filePath);
-        
+
         newAvatarUrl = publicUrlData.publicUrl;
       }
 
@@ -150,7 +150,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ userProfile }) => {
           className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm p-2"
         />
       </div>
-      
+
       <div>
          <label htmlFor="email" className="block text-sm font-medium text-slate-700">Email (cannot change)</label>
          <input

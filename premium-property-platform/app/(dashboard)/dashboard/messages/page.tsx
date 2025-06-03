@@ -119,7 +119,7 @@ export default function MessagesPage() {
       },
       receiver: allUsers.find(u => u.id === selectedUserId) || null,
     };
-    
+
     setMessages(prev => [...prev, newMessage as MessageWithSenderReceiver]);
     setNewMessageContent('');
 
@@ -141,8 +141,8 @@ export default function MessagesPage() {
       // For now, optimistic update is considered sufficient for this step
     }
   };
-  
-  const filteredUsers = allUsers.filter(user => 
+
+  const filteredUsers = allUsers.filter(user =>
     user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -151,7 +151,7 @@ export default function MessagesPage() {
   if (!currentUser && !isLoadingUsers) { // Added !isLoadingUsers to wait for user fetch
     return <div className="p-6 text-center text-slate-600">Please log in to view messages.</div>;
   }
-  
+
   if (isLoadingUsers && !currentUser) { // Initial loading state for current user
       return (
           <div className="flex justify-center items-center h-[calc(100vh-10rem)]">
@@ -171,7 +171,7 @@ export default function MessagesPage() {
         <div className="p-4 border-b border-slate-200">
           <h2 className="text-xl font-semibold text-slate-800">Conversations</h2>
            <div className="relative mt-2">
-            <input 
+            <input
               type="text"
               placeholder="Search users..."
               value={searchTerm}
@@ -226,8 +226,8 @@ export default function MessagesPage() {
                 messages.map(msg => (
                   <div key={msg.id} className={`flex ${msg.sender_id === currentUser?.id ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-xs lg:max-w-md p-3 rounded-xl shadow ${
-                      msg.sender_id === currentUser?.id 
-                        ? 'bg-amber-500 text-white' 
+                      msg.sender_id === currentUser?.id
+                        ? 'bg-amber-500 text-white'
                         : 'bg-white text-slate-700 border border-slate-200'
                     }`}>
                       <p className="text-sm">{msg.content}</p>

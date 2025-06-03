@@ -45,7 +45,7 @@ async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-2">{p.type} in {p.city}</h1>
           <p className="text-gray-700 text-lg mb-4">{p.street}, {p.district}</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div><span className="font-semibold">Price:</span> ${p.price?.toLocaleString()} ({p.purpose})</div>
             <div><span className="font-semibold">Area:</span> {p.area_m2} m²</div>

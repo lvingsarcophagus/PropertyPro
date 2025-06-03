@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 import { UserProfile, Property, SavedSearch } from '@/types'; // Added SavedSearch type
 import Image from 'next/image';
 import Link from 'next/link';
-import PropertyCard from '@/components/PropertyCard'; 
-import EditProfileForm from '@/components/EditProfileForm'; 
+import PropertyCard from '@/components/PropertyCard';
+import EditProfileForm from '@/components/EditProfileForm';
 import SavedSearchesList from '@/components/SavedSearchesList'; // New component import
 
 export default async function ProfilePage() {
@@ -22,7 +22,7 @@ export default async function ProfilePage() {
     .select('*')
     .eq('id', session.user.id)
     .single();
-  
+
   if (profileError && profileError.code !== 'PGRST116') {
     console.error("Error fetching profile:", profileError.message);
   }

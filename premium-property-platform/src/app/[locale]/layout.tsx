@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css"; // Assuming globals.css is in src/app/
-import Navbar from "@/components/Navbar"; 
+import Navbar from "@/components/Navbar";
 import { I18nProvider } from "@/lib/i18n"; // Removed getLocaleProps, getCurrentLocale, not used here
                                         // and assuming dynamic import below is sufficient for provider
                                         // If using older next-international, getLocaleProps might be needed here.
@@ -31,7 +31,7 @@ export default async function RootLayout({
   } catch (error) {
     console.error(`Could not load locale: ${locale}`, error);
     // Fallback to default locale or handle error appropriately
-    messages = (await import(`@/lib/i18n/locales/en`)).default; 
+    messages = (await import(`@/lib/i18n/locales/en`)).default;
     // Or redirect to a default locale path, though middleware should handle unknown locales.
   }
 

@@ -34,7 +34,7 @@ const SavedSearchItem: React.FC<SavedSearchItemProps> = ({ search, onDelete }) =
           .eq('id', search.id);
 
         if (deleteError) throw deleteError;
-        
+
         onDelete(search.id); // Notify parent for optimistic UI update
       } catch (err: any) {
         console.error('Error deleting saved search:', err);

@@ -33,7 +33,7 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-red-700 mb-2">Client Not Found or Not Authorized</h2>
           <p className="text-slate-600 text-sm mb-6">
-            The client you are trying to edit could not be found, or you do not have permission to access it. 
+            The client you are trying to edit could not be found, or you do not have permission to access it.
             This might happen if the client ID is incorrect or the client has been deleted.
           </p>
           <Link href="/dashboard/clients" className="inline-flex items-center text-amber-600 hover:text-amber-700 group text-sm">

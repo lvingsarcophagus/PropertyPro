@@ -30,7 +30,7 @@ export default async function ClientsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-slate-800">My Clients</h1>
-        <Link 
+        <Link
           href="/dashboard/clients/new"
           className="flex items-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out"
         >
@@ -67,8 +67,8 @@ export default async function ClientsPage() {
                     <Link href={`/dashboard/clients/${client.id}/edit`} className="text-amber-600 hover:text-amber-800 transition-colors p-1 inline-flex items-center justify-center rounded-md hover:bg-amber-100">
                       <Edit3 className="h-5 w-5" /> <span className="sr-only">Edit</span>
                     </Link>
-                    {/* Delete button can be added here or on the edit page 
-                    <button className="text-red-600 hover:text-red-800 transition-colors p-1 inline-flex items-center justify-center rounded-md hover:bg-red-100"><Trash2 className="h-5 w-5" /> <span className="sr-only">Delete</span></button> 
+                    {/* Delete button can be added here or on the edit page
+                    <button className="text-red-600 hover:text-red-800 transition-colors p-1 inline-flex items-center justify-center rounded-md hover:bg-red-100"><Trash2 className="h-5 w-5" /> <span className="sr-only">Delete</span></button>
                     */}
                   </td>
                 </tr>
@@ -84,7 +84,7 @@ export default async function ClientsPage() {
             You haven't added any clients to your list. Get started by adding your first one!
           </p>
           <div className="mt-6">
-            <Link 
+            <Link
               href="/dashboard/clients/new"
               className="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out"
             >

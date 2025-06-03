@@ -53,7 +53,7 @@ export default async function CalendarPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-3xl font-bold text-slate-800">My Calendar</h1>
-        <Link 
+        <Link
           href="/dashboard/calendar/new"
           className="flex items-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out"
         >
@@ -67,11 +67,11 @@ export default async function CalendarPage() {
             <div key={event.id} className="bg-white p-6 shadow-lg rounded-xl border border-slate-200 hover:shadow-2xl transition-shadow duration-300 ease-in-out">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
                 <h2 className="text-xl font-semibold text-slate-800 capitalize flex items-center">
-                  <CalendarIcon size={22} className="mr-2 text-amber-500" /> 
+                  <CalendarIcon size={22} className="mr-2 text-amber-500" />
                   {event.event_type}: {event.title}
                 </h2>
-                <Link 
-                  href={`/dashboard/calendar/${event.id}/edit`} 
+                <Link
+                  href={`/dashboard/calendar/${event.id}/edit`}
                   className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center mt-2 sm:mt-0"
                 >
                   <Edit3 size={16} className="mr-1" /> Edit Event
@@ -80,7 +80,7 @@ export default async function CalendarPage() {
 
               <div className="text-sm text-slate-600 space-y-2">
                 <p className="flex items-center">
-                  <Clock size={16} className="mr-2 text-slate-400" /> 
+                  <Clock size={16} className="mr-2 text-slate-400" />
                   <strong>Time:</strong> {format(parseISO(event.start_time), 'PPpp')} - {format(parseISO(event.end_time), 'p')}
                 </p>
                 {event.description && (
@@ -88,8 +88,8 @@ export default async function CalendarPage() {
                 )}
                 {event.clients && (
                   <p className="flex items-center">
-                    <User size={16} className="mr-2 text-slate-400" /> 
-                    <strong>Client:</strong> 
+                    <User size={16} className="mr-2 text-slate-400" />
+                    <strong>Client:</strong>
                     <Link href={`/dashboard/clients/${event.clients.id}/edit`} className="ml-1 text-blue-600 hover:underline">
                         {event.clients.name}
                     </Link>
@@ -97,8 +97,8 @@ export default async function CalendarPage() {
                 )}
                 {event.properties && (
                   <p className="flex items-center">
-                    <HomeIcon size={16} className="mr-2 text-slate-400" /> 
-                    <strong>Property:</strong> 
+                    <HomeIcon size={16} className="mr-2 text-slate-400" />
+                    <strong>Property:</strong>
                     <Link href={`/properties/${event.properties.id}`} className="ml-1 text-blue-600 hover:underline">
                         {event.properties.street}, {event.properties.city}
                     </Link>
@@ -119,7 +119,7 @@ export default async function CalendarPage() {
             Your calendar is currently empty. Add some events to get started!
           </p>
           <div className="mt-6">
-            <Link 
+            <Link
               href="/dashboard/calendar/new"
               className="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out"
             >

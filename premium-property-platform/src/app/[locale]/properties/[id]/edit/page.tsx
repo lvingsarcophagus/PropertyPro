@@ -18,7 +18,7 @@ async function EditPropertyPage({ params }: EditPropertyPageProps) {
   if (!session) {
     return <p className="container mx-auto p-4">You must be logged in to edit this property.</p>;
   }
-  
+
   // Use a browser client for data fetching, ensure this page is a client component or this is fine for initial load
   const supabase = createSupabaseBrowserClient();
   const { data: property, error } = await supabase

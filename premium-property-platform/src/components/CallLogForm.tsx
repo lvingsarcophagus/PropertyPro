@@ -61,7 +61,7 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
         setFormError('Invalid Call Time format.');
         return;
     }
-    
+
     let reminderAtTime: Date | null = null;
     if (formData.reminder_at) {
         reminderAtTime = parseISO(formData.reminder_at);
@@ -93,7 +93,7 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
           .from('calls')
           .update(submissionData)
           .eq('id', log.id)
-          .eq('broker_id', userId) 
+          .eq('broker_id', userId)
           .select()
           .single();
         if (error) throw error;
@@ -109,7 +109,7 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
         setFormSuccess('Call log added successfully!');
         if (onSave && newLog) onSave(newLog);
       }
-      
+
       router.refresh();
       setTimeout(() => {
         router.push('/dashboard/calls');
@@ -129,8 +129,8 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="client_id" className="block text-sm font-medium text-slate-700 mb-1">Link Client (Optional)</label>
-          <select 
-            id="client_id" 
+          <select
+            id="client_id"
             {...register('client_id')}
             className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           >
@@ -143,8 +143,8 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
 
         <div>
           <label htmlFor="property_id" className="block text-sm font-medium text-slate-700 mb-1">Link Property (Optional)</label>
-          <select 
-            id="property_id" 
+          <select
+            id="property_id"
             {...register('property_id')}
             className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           >
@@ -155,12 +155,12 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
           </select>
         </div>
       </div>
-      
+
       <div>
         <label htmlFor="call_time" className="block text-sm font-medium text-slate-700 mb-1">Call Time</label>
-        <input 
-          type="datetime-local" 
-          id="call_time" 
+        <input
+          type="datetime-local"
+          id="call_time"
           {...register('call_time', { required: 'Call time is required' })}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         />
@@ -169,10 +169,10 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1">Call Description / Notes</label>
-        <textarea 
-          id="description" 
-          {...register('description', { required: 'Description is required' })} 
-          rows={4} 
+        <textarea
+          id="description"
+          {...register('description', { required: 'Description is required' })}
+          rows={4}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         ></textarea>
         {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description.message}</p>}
@@ -181,10 +181,10 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="duration_minutes" className="block text-sm font-medium text-slate-700 mb-1">Duration (Minutes, Optional)</label>
-          <input 
-            type="number" 
-            id="duration_minutes" 
-            {...register('duration_minutes', { valueAsNumber: true, min: { value: 0, message: 'Duration must be positive' }})} 
+          <input
+            type="number"
+            id="duration_minutes"
+            {...register('duration_minutes', { valueAsNumber: true, min: { value: 0, message: 'Duration must be positive' }})}
             className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           />
           {errors.duration_minutes && <p className="text-xs text-red-500 mt-1">{errors.duration_minutes.message}</p>}
@@ -192,21 +192,21 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
 
         <div>
           <label htmlFor="outcome" className="block text-sm font-medium text-slate-700 mb-1">Call Outcome (Optional)</label>
-          <input 
-            type="text" 
-            id="outcome" 
-            {...register('outcome')} 
+          <input
+            type="text"
+            id="outcome"
+            {...register('outcome')}
             placeholder="e.g., Scheduled viewing, Follow-up needed"
             className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           />
         </div>
       </div>
-      
+
       <div>
         <label htmlFor="reminder_at" className="block text-sm font-medium text-slate-700 mb-1">Set Follow-up Reminder (Optional)</label>
-        <input 
-          type="datetime-local" 
-          id="reminder_at" 
+        <input
+          type="datetime-local"
+          id="reminder_at"
           {...register('reminder_at')}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         />
@@ -214,15 +214,15 @@ export default function CallLogForm({ log, userId, clients, properties, onSave }
 
 
       <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200">
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={() => router.push('/dashboard/calls')}
           className="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-colors text-sm"
         >
             Cancel
         </button>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={isSubmitting}
           className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:bg-slate-400"
         >

@@ -55,7 +55,7 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
       reminder: event?.reminder || false,
     },
   });
-  
+
   const watchedStartTime = watch("start_time");
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
           .from('calendar')
           .update(submissionData)
           .eq('id', event.id)
-          .eq('broker_id', userId) 
+          .eq('broker_id', userId)
           .select()
           .single();
         if (error) throw error;
@@ -120,7 +120,7 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
         setFormSuccess('Event added successfully!');
         if (onSave && newEvent) onSave(newEvent);
       }
-      
+
       // router.refresh() to update server components, then redirect
       router.refresh();
       setTimeout(() => {
@@ -140,10 +140,10 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
 
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-1">Event Title</label>
-        <input 
-          type="text" 
-          id="title" 
-          {...register('title', { required: 'Event title is required' })} 
+        <input
+          type="text"
+          id="title"
+          {...register('title', { required: 'Event title is required' })}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         />
         {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title.message}</p>}
@@ -151,8 +151,8 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
 
       <div>
         <label htmlFor="event_type" className="block text-sm font-medium text-slate-700 mb-1">Event Type</label>
-        <select 
-          id="event_type" 
+        <select
+          id="event_type"
           {...register('event_type', { required: 'Event type is required' })}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         >
@@ -162,13 +162,13 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
         </select>
         {errors.event_type && <p className="text-xs text-red-500 mt-1">{errors.event_type.message}</p>}
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="start_time" className="block text-sm font-medium text-slate-700 mb-1">Start Time</label>
-          <input 
-            type="datetime-local" 
-            id="start_time" 
+          <input
+            type="datetime-local"
+            id="start_time"
             {...register('start_time', { required: 'Start time is required' })}
             className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           />
@@ -176,9 +176,9 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
         </div>
         <div>
           <label htmlFor="end_time" className="block text-sm font-medium text-slate-700 mb-1">End Time</label>
-          <input 
-            type="datetime-local" 
-            id="end_time" 
+          <input
+            type="datetime-local"
+            id="end_time"
             {...register('end_time', { required: 'End time is required' })}
             className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           />
@@ -188,18 +188,18 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1">Description</label>
-        <textarea 
-          id="description" 
-          {...register('description')} 
-          rows={3} 
+        <textarea
+          id="description"
+          {...register('description')}
+          rows={3}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         ></textarea>
       </div>
 
       <div>
         <label htmlFor="client_id" className="block text-sm font-medium text-slate-700 mb-1">Link Client (Optional)</label>
-        <select 
-          id="client_id" 
+        <select
+          id="client_id"
           {...register('client_id')}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         >
@@ -212,8 +212,8 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
 
       <div>
         <label htmlFor="property_id" className="block text-sm font-medium text-slate-700 mb-1">Link Property (Optional)</label>
-        <select 
-          id="property_id" 
+        <select
+          id="property_id"
           {...register('property_id')}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         >
@@ -223,11 +223,11 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
           ))}
         </select>
       </div>
-      
+
       <div className="flex items-center">
-        <input 
-          type="checkbox" 
-          id="reminder" 
+        <input
+          type="checkbox"
+          id="reminder"
           {...register('reminder')}
           className="h-4 w-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500"
         />
@@ -236,15 +236,15 @@ export default function CalendarEventForm({ event, userId, clients, properties, 
 
 
       <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200">
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={() => router.push('/dashboard/calendar')}
           className="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-colors text-sm"
         >
             Cancel
         </button>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={isSubmitting}
           className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:bg-slate-400"
         >

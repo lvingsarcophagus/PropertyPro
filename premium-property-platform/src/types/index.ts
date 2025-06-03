@@ -49,12 +49,12 @@ export type SavedSearch = {
   id: string;
   user_id: string;
   name: string;
-  filters: { 
+  filters: {
     propertyType?: string;
     purpose?: string;
     city?: string;
     district?: string;
-    minPrice?: string; 
+    minPrice?: string;
     maxPrice?: string;
     minArea?: string;
     maxArea?: string;

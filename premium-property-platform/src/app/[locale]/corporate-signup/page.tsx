@@ -59,7 +59,7 @@ export default function CorporateSignupPage() {
       return;
     }
     // If formError was set by useEffect (e.g. user already has agency), prevent submission
-    if (formError && !formError.startsWith("Agency created, but failed to update your user role")) { 
+    if (formError && !formError.startsWith("Agency created, but failed to update your user role")) {
         return;
     }
 
@@ -161,7 +161,7 @@ export default function CorporateSignupPage() {
                  <textarea id="billingInfo" {...register('billingInfo')} rows={3} placeholder="Enter any preliminary billing details or notes" className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"></textarea>
              </div>
 
-             <button 
+             <button
                  type="submit"
                  disabled={rhfIsSubmitting || (!!formError && !formError.startsWith("CRITICAL:"))} // Disable if already has a non-critical formError from initial check
                  className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-lg disabled:bg-slate-400 disabled:cursor-not-allowed"

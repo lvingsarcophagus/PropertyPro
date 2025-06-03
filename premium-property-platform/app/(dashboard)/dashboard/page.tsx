@@ -1,6 +1,6 @@
 // app/(dashboard)/dashboard/page.tsx
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { UserProfile, Property } from '@/types'; 
+import { UserProfile, Property } from '@/types';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Home, PlusCircle, Users, MessageSquare, CalendarDays, Building, Briefcase } from 'lucide-react';
@@ -10,7 +10,7 @@ export default async function DashboardOverviewPage() {
   const { data: { session } } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect('/login'); 
+    redirect('/login');
   }
 
   const { data: userProfileData, error: profileFetchError } = await supabase
@@ -73,14 +73,14 @@ export default async function DashboardOverviewPage() {
       <h1 className="text-3xl font-bold text-slate-800 mb-6">
         Welcome to Your Dashboard, {profile?.name || session.user.email}!
       </h1>
-      
+
       {!profile && profileFetchError?.code === 'PGRST116' && (
         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded-md" role="alert">
           <p className="font-bold">Profile Setup Incomplete</p>
           <p>Your detailed profile information is still being processed or is not yet fully set up. This can be common for new accounts. Please try refreshing in a moment, or complete your profile if prompted.</p>
         </div>
       )}
-      
+
       <p className="text-slate-600 mb-4">
         This is your central hub for managing your properties, clients, and settings.
       </p>

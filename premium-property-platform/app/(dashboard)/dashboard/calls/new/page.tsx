@@ -30,7 +30,7 @@ export default async function NewCallLogPage() {
   // Fetch properties for the dropdown
   const { data: propertiesData, error: propertiesError } = await supabase
     .from('properties')
-    .select('id, street, city') 
+    .select('id, street, city')
     .eq('broker_id', session.user.id) // Assuming properties are linked to broker directly
     .order('created_at', { ascending: false });
     // Consider if company users logging calls need different property fetching logic (e.g., by agency_id)
@@ -49,8 +49,8 @@ export default async function NewCallLogPage() {
         </Link>
       </div>
       <h1 className="text-3xl font-bold text-slate-800">Log New Call</h1>
-      <CallLogForm 
-        userId={session.user.id} 
+      <CallLogForm
+        userId={session.user.id}
         clients={clients}
         properties={properties}
       />

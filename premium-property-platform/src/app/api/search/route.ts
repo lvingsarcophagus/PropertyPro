@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
   if (maxPrice) query = query.lte('price', parseFloat(maxPrice));
   if (minArea) query = query.gte('area_m2', parseFloat(minArea));
   if (maxArea) query = query.lte('area_m2', parseFloat(maxArea));
-  
+
   if (rooms) query = query.eq('num_rooms', parseInt(rooms, 10));
   if (floor) query = query.eq('floor_number', parseInt(floor, 10));
   if (heatingType) query = query.eq('heating_type', heatingType);
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
         });
     }
   }
-  
+
   // Apply Sorting
   if (sortBy) {
        query = query.order(sortBy, { ascending: sortOrderAsc });
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
 
   // Apply Pagination
   query = query.range(offset, offset + limit - 1);
-  
+
   const { data, error, count } = await query;
 
   if (error) {
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch properties', details: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ 
+  return NextResponse.json({
     properties: data,
     count: count, // Total count of matching items for pagination
     page,

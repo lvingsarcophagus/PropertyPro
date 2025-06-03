@@ -28,7 +28,7 @@ export default async function EditCalendarEventPage({ params }: EditCalendarEven
 
   if (eventError) {
     console.error('Error fetching event for edit:', eventError.message, 'Code:', eventError.code);
-    if (eventError.code === 'PGRST116' || eventError.code === '22P02') { 
+    if (eventError.code === 'PGRST116' || eventError.code === '22P02') {
       return (
         <div className="p-6 text-center max-w-lg mx-auto bg-white shadow-lg rounded-lg border border-red-200">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
@@ -68,7 +68,7 @@ export default async function EditCalendarEventPage({ params }: EditCalendarEven
   const { data: propertiesData, error: propertiesError } = await supabase
     .from('properties')
     .select('id, street, city')
-    .eq('broker_id', session.user.id) 
+    .eq('broker_id', session.user.id)
     .order('created_at', { ascending: false });
   if (propertiesError) console.error("Error fetching properties for form:", propertiesError);
   const properties = propertiesData as Pick<Property, 'id' | 'street' | 'city'>[] || [];
@@ -81,9 +81,9 @@ export default async function EditCalendarEventPage({ params }: EditCalendarEven
         </Link>
       </div>
       <h1 className="text-3xl font-bold text-slate-800">Edit Event: <span className="font-normal">{event.title}</span></h1>
-      <CalendarEventForm 
-        event={event} 
-        userId={session.user.id} 
+      <CalendarEventForm
+        event={event}
+        userId={session.user.id}
         clients={clients}
         properties={properties}
       />

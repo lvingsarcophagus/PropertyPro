@@ -4,8 +4,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import PropertyCard from '@/components/PropertyCard';
 import { Property } from '@/types'; // Assuming SavedSearchFilters type will be part of this
-import { createSupabaseBrowserClient } from '@/lib/supabase/client'; 
-import type { User } from '@supabase/supabase-js'; 
+import { createSupabaseBrowserClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 // Define a more specific type for filters from URL, matching SavedSearch['filters']
 type UrlFilters = {
@@ -115,10 +115,10 @@ export default function SearchPage() {
         // If currentPage is already not 1, setCurrentPage(1) will trigger the other useEffect.
         // So, we might not need to proceed with the fetch here if currentPage will change.
         // However, if currentPage is already 1, then the other useEffect won't trigger on page change.
-        setCurrentPage(1); 
+        setCurrentPage(1);
         // If already on page 1, the search must proceed from here.
         // If not on page 1, the useEffect listening to currentPage will take over.
-        if (currentPage === 1) { 
+        if (currentPage === 1) {
             // Proceed with fetch using pageToFetch = 1
         } else {
             return; // Let the useEffect triggered by setCurrentPage(1) handle the search
@@ -127,7 +127,7 @@ export default function SearchPage() {
 
     setIsLoading(true);
     setError(null);
-    
+
     const params = new URLSearchParams();
     // Append filters only if they have values
     if (propertyType) params.append('propertyType', propertyType);
@@ -142,10 +142,10 @@ export default function SearchPage() {
     if (floor) params.append('floor', floor);
     if (heatingType) params.append('heatingType', heatingType);
     if (keywords) params.append('keywords', keywords);
-    
+
     params.append('sortBy', sortBy);
     params.append('sortOrder', sortOrder);
-    params.append('page', String(pageToFetch)); 
+    params.append('page', String(pageToFetch));
     params.append('limit', String(limit));
     const queryString = params.toString();
 
@@ -171,31 +171,31 @@ export default function SearchPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [ 
+  }, [
     propertyType, purpose, city, district, minPrice, maxPrice,
     minArea, maxArea, rooms, floor, heatingType, keywords,
-    sortBy, sortOrder, limit, currentPage 
+    sortBy, sortOrder, limit, currentPage
   ]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSearch(true); 
+    handleSearch(true);
   };
-  
+
   const handleSortChange = () => {
-    handleSearch(true); 
+    handleSearch(true);
   };
 
   // Main useEffect for triggering search when critical states change
   useEffect(() => {
     if (initialFiltersApplied) { // Only run after initial URL params have been processed
-        handleSearch(currentPage === 1 && !window.location.search.includes('filters=')); 
+        handleSearch(currentPage === 1 && !window.location.search.includes('filters='));
         // Pass true if it's effectively a new search context (page 1 and not from URL filters directly)
         // This logic might need refinement based on desired behavior for URL filters vs manual changes.
         // A simpler approach: if filters were applied from URL, they set states, then this useEffect runs.
         // If any of these deps change due to user interaction, it also runs.
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps 
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, sortBy, sortOrder, initialFiltersApplied]); // handleSearch removed to simplify dep management
 
   // This useEffect is to make sure handleSearch is called AFTER states from URL are set.
@@ -214,11 +214,11 @@ export default function SearchPage() {
     setMinPrice(''); setMaxPrice(''); setMinArea(''); setMaxArea('');
     setRooms(''); setFloor(''); setHeatingType(''); setKeywords('');
     setSortBy('created_at'); setSortOrder('desc'); setError(null);
-    
+
     if (currentPage === 1) {
-        handleSearch(true); 
+        handleSearch(true);
     } else {
-        setCurrentPage(1); 
+        setCurrentPage(1);
     }
   };
 
@@ -255,7 +255,7 @@ export default function SearchPage() {
     setSaveSearchSuccess(null);
     // Using a specific loading state for save operation might be better if main search takes long
     // For now, re-using general isLoading, or just rely on button disabled state.
-    // setIsSaving(true); 
+    // setIsSaving(true);
 
     const currentFilters: UrlFilters = { // Use UrlFilters type for consistency
       propertyType, purpose, city, district, minPrice, maxPrice,
@@ -283,7 +283,7 @@ export default function SearchPage() {
       if (insertError) throw insertError;
 
       setSaveSearchSuccess(`Search "${saveSearchName}" saved successfully!`);
-      setSaveSearchName(''); 
+      setSaveSearchName('');
     } catch (err: any) {
       console.error('Error saving search:', err);
       setSaveSearchError(err.message || 'Failed to save search.');
@@ -331,7 +331,7 @@ export default function SearchPage() {
               <label htmlFor="district" className="block text-sm font-medium text-slate-700 mb-1">District</label>
               <input type="text" id="district" value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="e.g., Antakalnis" className="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500" />
             </div>
-            
+
             <hr className="my-6 border-slate-300" />
             <h3 className="text-xl font-semibold mb-4 text-slate-700">Advanced Filters</h3>
 
@@ -356,7 +356,7 @@ export default function SearchPage() {
                 <input type="number" id="maxArea" value={maxArea} onChange={(e) => setMaxArea(e.target.value)} placeholder="m²" className="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500" />
               </div>
             </div>
-            
+
             <div className="mb-4">
               <label htmlFor="rooms" className="block text-sm font-medium text-slate-700 mb-1">Number of Rooms</label>
               <input type="number" id="rooms" value={rooms} onChange={(e) => setRooms(e.target.value)} placeholder="e.g., 3" className="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500" />
@@ -384,15 +384,15 @@ export default function SearchPage() {
 
 
             <div className="flex flex-col space-y-3">
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     disabled={isLoading}
                     className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold py-2 px-4 rounded-md transition duration-300 disabled:bg-slate-400"
                 >
                     {isLoading ? 'Searching...' : 'Apply Filters'}
                 </button>
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     onClick={handleResetFilters}
                     className="w-full bg-slate-600 hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
                 >
@@ -417,9 +417,9 @@ export default function SearchPage() {
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Search Results <span className="text-lg font-normal text-slate-600">({totalCount} found)</span></h1>
             <div className="flex gap-2 items-center">
                 <label htmlFor="sortBy" className="text-sm font-medium text-slate-700">Sort by:</label>
-                <select 
-                    id="sortBy" 
-                    value={sortBy} 
+                <select
+                    id="sortBy"
+                    value={sortBy}
                     onChange={(e) => { setSortBy(e.target.value); handleSortChange(); }}
                     className="p-2 border border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 text-sm"
                 >
@@ -427,9 +427,9 @@ export default function SearchPage() {
                     <option value="price">Price</option>
                     <option value="area_m2">Area</option>
                 </select>
-                <select 
-                    id="sortOrder" 
-                    value={sortOrder} 
+                <select
+                    id="sortOrder"
+                    value={sortOrder}
                     onChange={(e) => { setSortOrder(e.target.value); handleSortChange(); }}
                     className="p-2 border border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 text-sm"
                 >
@@ -438,10 +438,10 @@ export default function SearchPage() {
                 </select>
             </div>
           </div>
-          
+
           {error && <p className="text-red-500 bg-red-100 p-3 rounded-md mb-4">{error}</p>}
 
-          {isLoading && searchResults.length === 0 ? ( 
+          {isLoading && searchResults.length === 0 ? (
             <div className="text-center py-10">
               <p className="text-slate-600 text-lg">Loading results...</p>
               <svg className="animate-spin h-8 w-8 text-amber-500 mx-auto mt-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -478,11 +478,11 @@ export default function SearchPage() {
                 </div>
               )}
             </>
-          ) : !isLoading ? ( 
+          ) : !isLoading ? (
             <div className="text-center py-10">
               <p className="text-slate-600 text-lg">No properties found matching your criteria. Try adjusting your filters.</p>
             </div>
-          ) : null } 
+          ) : null }
         </main>
       </div>
 
@@ -493,8 +493,8 @@ export default function SearchPage() {
             <h3 className="text-xl font-semibold mb-4 text-slate-800">Save Search</h3>
             {saveSearchError && <p className="text-red-500 bg-red-100 p-2 rounded-md mb-3 text-sm">{saveSearchError}</p>}
             {saveSearchSuccess && <p className="text-green-500 bg-green-100 p-2 rounded-md mb-3 text-sm">{saveSearchSuccess}</p>}
-            
-            {!saveSearchSuccess && ( 
+
+            {!saveSearchSuccess && (
               <div className="space-y-4">
                 <div>
                   <label htmlFor="saveSearchName" className="block text-sm font-medium text-slate-700">Search Name</label>
@@ -512,14 +512,14 @@ export default function SearchPage() {
                     type="button"
                     onClick={() => setShowSaveSearchModal(false)}
                     className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition"
-                    disabled={isLoading && !saveSearchError && !saveSearchSuccess} 
+                    disabled={isLoading && !saveSearchError && !saveSearchSuccess}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     onClick={executeSaveSearch}
-                    disabled={isLoading} 
+                    disabled={isLoading}
                     className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-md transition disabled:bg-slate-400"
                   >
                     {isLoading && !saveSearchError && !saveSearchSuccess ? 'Saving...' : 'Save'}

@@ -97,10 +97,10 @@ export default function ClientForm({ client, userId, onSave }: ClientFormProps) 
 
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-        <input 
-          type="text" 
-          id="name" 
-          {...register('name', { required: 'Client name is required' })} 
+        <input
+          type="text"
+          id="name"
+          {...register('name', { required: 'Client name is required' })}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
         />
         {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
@@ -108,10 +108,10 @@ export default function ClientForm({ client, userId, onSave }: ClientFormProps) 
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
-        <input 
-          type="email" 
-          id="email" 
-          {...register('email', { pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email format' }})} 
+        <input
+          type="email"
+          id="email"
+          {...register('email', { pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email format' }})}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
         />
         {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
@@ -119,34 +119,34 @@ export default function ClientForm({ client, userId, onSave }: ClientFormProps) 
 
       <div>
         <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
-        <input 
-          type="tel" 
-          id="phone" 
-          {...register('phone')} 
+        <input
+          type="tel"
+          id="phone"
+          {...register('phone')}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
         />
       </div>
 
       <div>
         <label htmlFor="notes" className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
-        <textarea 
-          id="notes" 
-          {...register('notes')} 
-          rows={4} 
+        <textarea
+          id="notes"
+          {...register('notes')}
+          rows={4}
           className="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
         ></textarea>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200">
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={() => router.push('/dashboard/clients')}
           className="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-colors text-sm"
         >
             Cancel
         </button>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={isSubmitting}
           className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:bg-slate-400"
         >

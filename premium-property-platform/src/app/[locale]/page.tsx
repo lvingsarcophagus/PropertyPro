@@ -1,6 +1,6 @@
 // src/app/[locale]/page.tsx
 import Link from 'next/link';
-// import Head from 'next/head'; // Remove: Not used in App Router like this. Metadata is handled by `export const metadata` or generateMetadata
+import { getI18n } from '@/lib/i18n'; // Import getI18n
 
 // The page now implicitly receives locale if needed, but for static content, may not be used directly.
 // export async function generateMetadata({ params: { locale } }: { params: { locale: string }}) {
@@ -11,33 +11,42 @@ import Link from 'next/link';
 //   };
 // }
 
-export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
+export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  const t = await getI18n();
   // locale is available here if needed for any direct conditional rendering not handled by i18n hooks/components
   // console.log("Current locale on homepage:", locale);
 
   return (
     <>
-      {/* Metadata is handled by layout.tsx or specific metadata exports, not <Head> here. */}
-      <main className="flex flex-col min-h-screen">
+      {/* Metadata is handled by layout.tsx or specific metadata exports */}
+      {/* The main tag is now part of the RootLayout, so we don't need it again here.
+          However, to keep the structure as it was and ensure styling applies,
+          we might need to ensure the RootLayout's <main> tag is the one taking effect,
+          or this page's <main> tag should be a <div> or fragment.
+          For simplicity, assuming this <main> works within the parent <main> from layout.
+          A better approach might be to not have <main> here if layout already has it.
+          Let's remove this <main> and assume the one in layout.tsx handles the flex container.
+      */}
+      {/* <main className="flex flex-col min-h-screen"> */} {/* Removed this main tag */}
+
         {/* Hero Section */}
-        <section className="bg-slate-900 text-white py-20">
+        <section className="bg-slate-900 text-white py-20 pt-36"> {/* Added pt-36 to account for fixed navbar height */}
           <div className="container mx-auto px-6 text-center">
             <h1 className="text-5xl font-bold mb-4 md:text-6xl">
-              Discover, List, Connect
+              {t('homepage.hero_title')}
             </h1>
             <p className="text-xl mb-8 md:text-2xl text-slate-300">
-              Your Premium Property Broking Platform
+              {t('homepage.hero_subtitle')}
             </p>
             <div className="space-x-4">
-              {/* Links will be automatically prefixed with the current locale by Next.js/next-international */}
               <Link href="/signup" legacyBehavior>
                 <a className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
-                  Join Now
+                  {t('homepage.hero_cta_join')}
                 </a>
               </Link>
               <Link href="/properties" legacyBehavior>
                 <a className="bg-transparent hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-lg border-2 border-amber-500 text-lg transition duration-300">
-                  Search Properties
+                  {t('homepage.hero_cta_search')}
                 </a>
               </Link>
             </div>
@@ -48,7 +57,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
         <section className="py-16 bg-slate-50">
           <div className="container mx-auto px-6">
             <h2 className="text-4xl font-bold text-center mb-12 text-slate-800">
-              Platform Highlights
+              Platform Highlights {/* This could also be translated */}
             </h2>
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div className="p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
@@ -86,7 +95,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
         <section className="py-16 bg-slate-100">
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-4xl font-bold text-slate-800 mb-8">
-              Trusted by Professionals
+              Trusted by Professionals {/* This could also be translated */}
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Hear what our users say about their success with our platform.
@@ -94,16 +103,16 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
             </p>
           </div>
         </section>
-        
+
         {/* Call to Action Section */}
         <section className="py-20 bg-amber-500">
             <div className="container mx-auto px-6 text-center">
                 <h2 className="text-3xl font-bold text-slate-900 mb-6">
-                    Ready to Elevate Your Real Estate Business?
+                    Ready to Elevate Your Real Estate Business? {/* This could also be translated */}
                 </h2>
                 <Link href="/signup" legacyBehavior>
                     <a className="bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-10 rounded-lg text-xl transition duration-300">
-                    Get Started Today
+                    Get Started Today {/* This could also be translated */}
                     </a>
                 </Link>
             </div>
@@ -116,7 +125,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
             <p className="text-sm mt-1">Designed with Next.js, Tailwind CSS, and Supabase.</p>
           </div>
         </footer>
-      </main>
+      {/* </main> */} {/* Removed this main tag closing */}
     </>
   );
 }
