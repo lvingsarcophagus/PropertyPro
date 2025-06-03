@@ -1,103 +1,135 @@
-// src/app/signup/page.tsx
+// src/app/[locale]/signup/page.tsx
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import { useI18n } from '@/lib/i18n/index';
+import { useForm, SubmitHandler } from 'react-hook-form'; // Import useForm
+
+// Define form values type
+type SignUpFormValues = {
+    email: string;
+    password_input: string; // Renamed to avoid conflict with any 'password' state if used directly
+    confirmPassword_input: string;
+};
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { t } = useI18n();
+  // Removed individual state for email, password, confirmPassword as react-hook-form will handle them
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createSupabaseBrowserClient();
+  const searchParams = useSearchParams();
 
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<SignUpFormValues>();
+  const password_input = watch("password_input"); // To compare with confirmPassword
+
+  useEffect(() => {
+    const urlMessage = searchParams.get('message');
+    if (urlMessage) {
+      setMessage(decodeURIComponent(urlMessage));
+    }
+     const urlError = searchParams.get('error');
+    if (urlError) {
+        setError(decodeURIComponent(urlError));
+    }
+  }, [searchParams]);
+
+  const handleSignUp: SubmitHandler<SignUpFormValues> = async (data) => {
     setError(null);
     setMessage(null);
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    // Password confirmation is implicitly handled by react-hook-form's `validate` if set up,
+    // but a manual check is fine too or can be an additional layer.
+    // For this setup, we rely on the form structure to have a confirmPassword field.
+    // The prompt's original logic had a direct comparison which is fine for this client component.
+    if (data.password_input !== data.confirmPassword_input) {
+      setError(t('auth.error_passwords_do_not_match'));
       return;
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
+    const emailRedirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
+
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password_input, // Use the value from react-hook-form
       options: {
-        // emailRedirectTo: `${window.location.origin}/auth/callback`, // For email confirmation
+        emailRedirectTo,
       },
     });
 
     if (signUpError) {
-      setError(signUpError.message);
-    } else if (data.user && data.user.identities?.length === 0) {
-      // This case handles if email confirmation is required and the user already exists but is not confirmed.
-       setMessage("User already exists but is unconfirmed. Please check your email to confirm your account or try logging in.");
-       setError("User already exists. If you haven't confirmed your email, please check your inbox.");
-    } else if (data.user) {
-      setMessage("Sign up successful! Please check your email to confirm your account.");
-      // router.push('/'); // Or a page prompting to check email
-      // router.refresh();
+      if (signUpError.message.includes("User already registered")) {
+        setError(t('auth.error_user_exists_unconfirmed'));
+      } else {
+        setError(signUpError.message);
+      }
+    } else if (signUpData.user && signUpData.user.identities?.length === 0) {
+      setMessage(t('auth.error_user_exists_unconfirmed')); // Or a slightly different message if desired
+    } else if (signUpData.user) {
+      setMessage(t('auth.message_signup_success'));
     } else {
-       setError("An unexpected error occurred during sign up.");
+       setError(t('auth.error_unexpected_signup'));
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-900">Create an Account</h1>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        {message && <p className="text-green-500 text-sm text-center">{message}</p>}
-        <form onSubmit={handleSignUp} className="space-y-6">
+    <div className="flex items-center justify-center min-h-screen bg-slate-100 pt-20">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl border border-slate-200">
+        <h1 className="text-3xl font-bold text-center text-slate-800">{t('auth.signup_title')}</h1>
+
+        {error && <p className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-md border border-red-200">{error}</p>}
+        {message && <p className="text-green-500 text-sm text-center bg-green-50 p-3 rounded-md border border-green-200">{message}</p>}
+
+        <form onSubmit={handleSubmit(handleSignUp)} className="space-y-6">
           <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700">{t('auth.signup_email_label')}</label>
             <input
               id="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              {...register('email', { required: t('forms.email_required'), pattern: { value: /\S+@\S+\.\S+/, message: t('forms.email_invalid') }})}
+              className="mt-1 w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
             />
+             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
           <div>
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password_input" className="block text-sm font-medium text-slate-700">{t('auth.signup_password_label')}</label>
             <input
-              id="password"
+              id="password_input"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              {...register('password_input', { required: t('forms.password_required'), minLength : { value: 6, message: t('forms.password_min_length', {length: 6})}})}
+              className="mt-1 w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
             />
+            {errors.password_input && <p className="text-red-500 text-xs mt-1">{errors.password_input.message}</p>}
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">Confirm Password</label>
+            <label htmlFor="confirmPassword_input" className="block text-sm font-medium text-slate-700">{t('auth.signup_confirm_password_label')}</label>
             <input
-              id="confirmPassword"
+              id="confirmPassword_input"
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              {...register('confirmPassword_input', {
+                required: t('forms.confirm_password_required'),
+                validate: value => value === password_input || t('auth.error_passwords_do_not_match')
+              })}
+              className="mt-1 w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
             />
+            {errors.confirmPassword_input && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword_input.message}</p>}
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isSubmitting}
+            className="w-full px-4 py-3 font-semibold text-white bg-amber-600 rounded-lg shadow-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-300 disabled:bg-slate-400"
           >
-            Sign Up
+            {isSubmitting ? t('common.loading') : t('auth.signup_button')}
           </button>
         </form>
-        <div className="text-sm text-center">
-          <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-            Already have an account? Login
+        <div className="text-sm text-center text-slate-600">
+          {t('auth.signup_login_prompt')}{' '}
+          <Link href="/login" className="font-medium text-amber-600 hover:text-amber-700 hover:underline">
+            {t('auth.signup_login_link')}
           </Link>
         </div>
       </div>

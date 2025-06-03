@@ -1,84 +1,105 @@
-// src/app/login/page.tsx
+// src/app/[locale]/login/page.tsx
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import { useI18n } from '@/lib/i18n/index';
+import { useForm } from 'react-hook-form'; // Import useForm
+
+// Define a type for form values, even if simple for login
+type LoginFormValues = {
+    email: string;
+    password: string;
+};
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { t } = useI18n();
+  // const [email, setEmail] = useState(''); // Handled by react-hook-form
+  // const [password, setPassword] = useState(''); // Handled by react-hook-form
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createSupabaseBrowserClient();
+  const searchParams = useSearchParams();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormValues>();
+
+
+  useEffect(() => {
+    const urlMessage = searchParams.get('message');
+    if (urlMessage) {
+      setMessage(decodeURIComponent(urlMessage));
+    }
+    const urlError = searchParams.get('error');
+    if (urlError) {
+        setError(decodeURIComponent(urlError));
+    }
+  }, [searchParams]);
+
+  const handleLogin = async (data: LoginFormValues) => { // Data now comes from react-hook-form
     setError(null);
     setMessage(null);
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: data.email,
+      password: data.password,
     });
 
     if (signInError) {
-      setError(signInError.message);
+      if (signInError.message === 'Invalid login credentials') {
+        setError(t('auth.supabase_auth_invalid_credentials'));
+      } else {
+        setError(signInError.message);
+      }
     } else {
-      setMessage('Logged in successfully! Redirecting...');
-      router.push('/'); // Redirect to homepage
-      router.refresh(); // Important to refresh server components & session state
+      setMessage(t('auth.login_success_message'));
+      window.location.href = '/';
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-900">Login</h1>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        {message && <p className="text-green-500 text-sm text-center">{message}</p>}
-        <form onSubmit={handleLogin} className="space-y-6">
+    <div className="flex items-center justify-center min-h-screen bg-slate-100 pt-20">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl border border-slate-200">
+        <h1 className="text-3xl font-bold text-center text-slate-800">{t('auth.login_title')}</h1>
+
+        {error && <p className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-md border border-red-200">{error}</p>}
+        {message && <p className="text-green-500 text-sm text-center bg-green-50 p-3 rounded-md border border-green-200">{message}</p>}
+
+        <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
           <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700">{t('auth.login_email_label')}</label>
             <input
               id="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              {...register('email', { required: true })} // Register with react-hook-form
+              className="mt-1 w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
             />
           </div>
           <div>
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700">{t('auth.login_password_label')}</label>
             <input
               id="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              {...register('password', { required: true })} // Register with react-hook-form
+              className="mt-1 w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow"
             />
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isSubmitting} // Use isSubmitting from react-hook-form
+            className="w-full px-4 py-3 font-semibold text-white bg-amber-600 rounded-lg shadow-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-300 disabled:bg-slate-400"
           >
-            Login
+            {isSubmitting ? t('common.loading') : t('auth.login_button')}
           </button>
         </form>
-        <div className="text-sm text-center">
-          <Link href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-            Don't have an account? Sign Up
+        <div className="text-sm text-center text-slate-600">
+          {t('auth.login_signup_prompt')}{' '}
+          <Link href="/signup" className="font-medium text-amber-600 hover:text-amber-700 hover:underline">
+            {t('auth.login_signup_link')}
           </Link>
         </div>
-        {/* <div className="text-sm text-center">
-          <Link href="/forgot-password"> // TODO: Implement forgot password
-            <a className="font-medium text-indigo-600 hover:text-indigo-500">Forgot Password?</a>
-          </Link>
-        </div> */}
       </div>
     </div>
   );
