@@ -1,15 +1,23 @@
-// src/app/page.tsx
+// src/app/[locale]/page.tsx
 import Link from 'next/link';
-import Head from 'next/head';
+// import Head from 'next/head'; // Remove: Not used in App Router like this. Metadata is handled by `export const metadata` or generateMetadata
 
-export default function HomePage() {
+// The page now implicitly receives locale if needed, but for static content, may not be used directly.
+// export async function generateMetadata({ params: { locale } }: { params: { locale: string }}) {
+//   // Optionally, generate dynamic metadata based on locale
+//   // For now, using static metadata from layout or could define specific here
+//   return {
+//     title: locale === 'lt' ? 'Pagrindinis Puslapis' : 'Homepage',
+//   };
+// }
+
+export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  // locale is available here if needed for any direct conditional rendering not handled by i18n hooks/components
+  // console.log("Current locale on homepage:", locale);
+
   return (
     <>
-      <Head>
-        <title>Premium Property Broking Platform</title>
-        <meta name="description" content="Discover, List, Connect: Your Premium Property Broking Platform for real estate professionals." />
-      </Head>
-
+      {/* Metadata is handled by layout.tsx or specific metadata exports, not <Head> here. */}
       <main className="flex flex-col min-h-screen">
         {/* Hero Section */}
         <section className="bg-slate-900 text-white py-20">
@@ -21,6 +29,7 @@ export default function HomePage() {
               Your Premium Property Broking Platform
             </p>
             <div className="space-x-4">
+              {/* Links will be automatically prefixed with the current locale by Next.js/next-international */}
               <Link href="/signup" legacyBehavior>
                 <a className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
                   Join Now
@@ -44,7 +53,6 @@ export default function HomePage() {
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div className="p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <div className="text-amber-500 mb-4">
-                  {/* Placeholder for an icon, e.g., using an SVG or a font icon library */}
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 <h3 className="text-2xl font-semibold mb-3 text-slate-700">Individual & Company Dashboards</h3>
@@ -84,7 +92,6 @@ export default function HomePage() {
               Hear what our users say about their success with our platform.
               (Testimonials coming soon...)
             </p>
-            {/* Placeholder for testimonial cards */}
           </div>
         </section>
         

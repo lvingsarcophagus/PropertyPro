@@ -67,3 +67,64 @@ export type SavedSearch = {
   };
   created_at: string;
 };
+
+export type Client = {
+  id: string; // UUID
+  broker_id: string; // UUID of the user (broker)
+  name: string;
+  phone?: string | null;
+  email?: string | null;
+  notes?: string | null;
+  created_at: string; // timestamptz
+  updated_at: string; // timestamptz
+};
+
+export type CalendarEventType = 'appointment' | 'viewing' | 'task';
+
+export type CalendarEvent = {
+  id: string; // UUID
+  broker_id: string; // UUID of the user (broker)
+  client_id?: string | null; // UUID of the client
+  property_id?: string | null; // UUID of the property
+  event_type: CalendarEventType;
+  title: string;
+  description?: string | null;
+  start_time: string; // ISO string (TIMESTAMPTZ)
+  end_time: string; // ISO string (TIMESTAMPTZ)
+  reminder?: boolean | null;
+  created_at: string; // timestamptz
+  updated_at: string; // timestamptz
+};
+
+export type Message = {
+  id: string; // UUID
+  sender_id: string; // UUID of the user (broker/admin)
+  receiver_id: string; // UUID of the user (broker/admin)
+  property_id?: string | null; // UUID of a related property
+  content: string;
+  is_read: boolean;
+  sent_at: string; // timestamptz
+  // Optional hydrated fields for display
+  sender?: Pick<UserProfile, 'id' | 'name' | 'profile_picture'> | null;
+  receiver?: Pick<UserProfile, 'id' | 'name' | 'profile_picture'> | null;
+};
+
+export type CallLog = {
+  id: string; // UUID
+  broker_id: string; // UUID of the user (broker)
+  client_id?: string | null; // UUID of the client
+  property_id?: string | null; // UUID of the property discussed
+  // title?: string | null;
+  description: string;
+  call_time: string; // ISO string (TIMESTAMPTZ)
+  duration_minutes?: number | null;
+  outcome?: string | null;
+  reminder_at?: string | null; // ISO string (TIMESTAMPTZ)
+  reminder_sent?: boolean | null;
+  created_at: string; // timestamptz
+  updated_at: string; // timestamptz
+
+  // Optional hydrated fields for display
+  client_name?: string | null; // If joining with clients table
+  property_address?: string | null; // If joining with properties table
+};
